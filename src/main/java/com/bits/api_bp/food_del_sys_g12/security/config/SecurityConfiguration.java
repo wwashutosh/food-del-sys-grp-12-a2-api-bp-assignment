@@ -35,7 +35,8 @@ public class SecurityConfiguration {
             "/configuration/security",
             "/swagger-ui/**",
             "/webjars/**",
-            "/swagger-ui.html"};
+            "/swagger-ui.html",
+            "/h2-console/**"};
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
     private final LogoutHandler logoutHandler;
@@ -45,10 +46,11 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
+                .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.sameOrigin()))
                 .authorizeHttpRequests(req ->
                         req.requestMatchers(WHITE_LIST_URL)
                                 .permitAll()
-                                .requestMatchers("/food_del_sys_g12/**").hasAnyRole(ADMIN.name(),USER.name())
+                                .requestMatchers("/food_del_sys_g12/**").hasAnyRole(ADMIN.name(), USER.name())
                                 .requestMatchers(GET, "/food_del_sys_g12/**").hasAnyAuthority(ADMIN_READ.name())
                                 .requestMatchers(POST, "/food_del_sys_g12/**").hasAnyAuthority(ADMIN_CREATE.name())
                                 .anyRequest()
