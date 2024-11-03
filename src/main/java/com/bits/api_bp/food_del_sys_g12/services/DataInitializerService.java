@@ -24,8 +24,9 @@ public class DataInitializerService {
     }
 
     private void dropTables() {
-        jdbcTemplate.execute("DROP TABLE IF EXISTS menu;");
+        jdbcTemplate.execute("DROP TABLE IF EXISTS cart_items;");
         jdbcTemplate.execute("DROP TABLE IF EXISTS orders;");
+        jdbcTemplate.execute("DROP TABLE IF EXISTS menu;");
         jdbcTemplate.execute("DROP TABLE IF EXISTS restaurants;");
         jdbcTemplate.execute("DROP TABLE IF EXISTS users;");
     }
@@ -47,6 +48,15 @@ public class DataInitializerService {
                 "rating DECIMAL(2, 1)" +
                 ");");
 
+        jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS menu (" +
+                "id CHAR(6) PRIMARY KEY," +
+                "restaurant_id CHAR(6)," +
+                "item_name VARCHAR(255)," +
+                "description VARCHAR(255)," +
+                "price DECIMAL(10, 2)," +
+                "availability BOOLEAN" +
+                ");");
+
         jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS orders (" +
                 "id CHAR(6) PRIMARY KEY," +
                 "user_id CHAR(6)," +
@@ -55,14 +65,11 @@ public class DataInitializerService {
                 "status VARCHAR(50)" +
                 ");");
 
-        jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS menu (" +
+        jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS cart_items (" +
                 "id CHAR(6) PRIMARY KEY," +
-                "restaurant_id CHAR(6)," +
-                "name VARCHAR(255)," +
-                "description TEXT," +
-                "price DECIMAL(10, 2)," +
-                "is_available BOOLEAN DEFAULT TRUE," +
-                "category VARCHAR(50)" +
+                "user_id CHAR(6)," +
+                "menu_item_id CHAR(6)," +
+                "quantity INT" +
                 ");");
     }
 
@@ -81,6 +88,13 @@ public class DataInitializerService {
         insertRestaurant("Taco Fiesta", "321 Spice Rd, Mexico City", "Mexican", 4.1);
         insertRestaurant("Burger Haven", "654 Meat St, Chicago", "American", 4.6);
 
+        // Insert menu items
+        insertMenuItem("ITEM01", "Butter Chicken", "Creamy chicken curry", 12.99, true);
+        insertMenuItem("ITEM02", "Margherita Pizza", "Classic pizza with mozzarella and basil", 9.99, true);
+        insertMenuItem("ITEM03", "California Roll", "Sushi with crab, avocado, and cucumber", 8.99, true);
+        insertMenuItem("ITEM04", "Tacos al Pastor", "Tacos with marinated pork", 7.49, true);
+        insertMenuItem("ITEM05", "Cheeseburger", "Juicy burger with cheese", 10.49, true);
+
         // Insert orders
         insertOrder("USER01", "RESTA1", "DELIVERED");
         insertOrder("USER02", "RESTA2", "PENDING");
@@ -88,13 +102,10 @@ public class DataInitializerService {
         insertOrder("USER04", "RESTA4", "IN_PROGRESS");
         insertOrder("USER05", "RESTA5", "DELIVERED");
 
-        // Insert menu items for restaurants
-        insertMenuItem("RESTA1", "Paneer Butter Masala", "Delicious Indian dish with paneer and buttery gravy", 12.50, "Main Course");
-        insertMenuItem("RESTA1", "Naan", "Freshly baked naan bread", 3.00, "Side");
-        insertMenuItem("RESTA2", "Margherita Pizza", "Classic pizza with cheese and tomato sauce", 10.00, "Main Course");
-        insertMenuItem("RESTA3", "Salmon Sushi", "Fresh salmon nigiri sushi", 15.00, "Main Course");
-        insertMenuItem("RESTA4", "Taco", "Soft corn taco with beef and vegetables", 5.00, "Main Course");
-        insertMenuItem("RESTA5", "Cheeseburger", "Juicy burger with cheese and lettuce", 8.00, "Main Course");
+        // Insert cart items
+        insertCartItem("USER01", "ITEM01", 2);
+        insertCartItem("USER02", "ITEM02", 1);
+        insertCartItem("USER03", "ITEM03", 3);
     }
 
     private void insertUser(String name, String email, String password, String role) {
@@ -117,6 +128,16 @@ public class DataInitializerService {
         }
     }
 
+    private void insertMenuItem(String itemId, String itemName, String description, double price, boolean availability) {
+        int rows = jdbcTemplate.update("INSERT INTO menu (id, restaurant_id, item_name, description, price, availability) VALUES (?, ?, ?, ?, ?, ?)",
+                itemId, "RESTA1", itemName, description, price, availability);
+        if (rows > 0) {
+            System.out.println("Inserted menu item: " + itemName);
+        } else {
+            System.out.println("Failed to insert menu item: " + itemName);
+        }
+    }
+
     private void insertOrder(String userId, String restaurantId, String status) {
         int rows = jdbcTemplate.update("INSERT INTO orders (id, user_id, restaurant_id, order_date, status) VALUES (?, ?, ?, NOW(), ?)",
                 uuidService.generateShortUUID(), userId, restaurantId, status);
@@ -127,13 +148,13 @@ public class DataInitializerService {
         }
     }
 
-    private void insertMenuItem(String restaurantId, String name, String description, double price, String category) {
-        int rows = jdbcTemplate.update("INSERT INTO menu (id, restaurant_id, name, description, price, is_available, category) VALUES (?, ?, ?, ?, ?, ?, ?)",
-                uuidService.generateShortUUID(), restaurantId, name, description, price, true, category);
+    private void insertCartItem(String userId, String menuItemId, int quantity) {
+        int rows = jdbcTemplate.update("INSERT INTO cart_items (id, user_id, menu_item_id, quantity) VALUES (?, ?, ?, ?)",
+                uuidService.generateShortUUID(), userId, menuItemId, quantity);
         if (rows > 0) {
-            System.out.println("Inserted menu item: " + name + " for restaurant ID: " + restaurantId);
+            System.out.println("Inserted cart item for user ID: " + userId);
         } else {
-            System.out.println("Failed to insert menu item: " + name);
+            System.out.println("Failed to insert cart item for user ID: " + userId);
         }
     }
 }
