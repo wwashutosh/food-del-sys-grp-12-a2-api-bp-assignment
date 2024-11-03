@@ -24,6 +24,7 @@ public class DataInitializerService {
     }
 
     private void dropTables() {
+        jdbcTemplate.execute("DROP TABLE IF EXISTS menu;");
         jdbcTemplate.execute("DROP TABLE IF EXISTS orders;");
         jdbcTemplate.execute("DROP TABLE IF EXISTS restaurants;");
         jdbcTemplate.execute("DROP TABLE IF EXISTS users;");
@@ -53,6 +54,16 @@ public class DataInitializerService {
                 "order_date TIMESTAMP," +
                 "status VARCHAR(50)" +
                 ");");
+
+        jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS menu (" +
+                "id CHAR(6) PRIMARY KEY," +
+                "restaurant_id CHAR(6)," +
+                "name VARCHAR(255)," +
+                "description TEXT," +
+                "price DECIMAL(10, 2)," +
+                "is_available BOOLEAN DEFAULT TRUE," +
+                "category VARCHAR(50)" +
+                ");");
     }
 
     private void insertDummyData() {
@@ -76,6 +87,14 @@ public class DataInitializerService {
         insertOrder("USER03", "RESTA3", "CANCELLED");
         insertOrder("USER04", "RESTA4", "IN_PROGRESS");
         insertOrder("USER05", "RESTA5", "DELIVERED");
+
+        // Insert menu items for restaurants
+        insertMenuItem("RESTA1", "Paneer Butter Masala", "Delicious Indian dish with paneer and buttery gravy", 12.50, "Main Course");
+        insertMenuItem("RESTA1", "Naan", "Freshly baked naan bread", 3.00, "Side");
+        insertMenuItem("RESTA2", "Margherita Pizza", "Classic pizza with cheese and tomato sauce", 10.00, "Main Course");
+        insertMenuItem("RESTA3", "Salmon Sushi", "Fresh salmon nigiri sushi", 15.00, "Main Course");
+        insertMenuItem("RESTA4", "Taco", "Soft corn taco with beef and vegetables", 5.00, "Main Course");
+        insertMenuItem("RESTA5", "Cheeseburger", "Juicy burger with cheese and lettuce", 8.00, "Main Course");
     }
 
     private void insertUser(String name, String email, String password, String role) {
@@ -105,6 +124,16 @@ public class DataInitializerService {
             System.out.println("Inserted order for user ID: " + userId);
         } else {
             System.out.println("Failed to insert order for user ID: " + userId);
+        }
+    }
+
+    private void insertMenuItem(String restaurantId, String name, String description, double price, String category) {
+        int rows = jdbcTemplate.update("INSERT INTO menu (id, restaurant_id, name, description, price, is_available, category) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                uuidService.generateShortUUID(), restaurantId, name, description, price, true, category);
+        if (rows > 0) {
+            System.out.println("Inserted menu item: " + name + " for restaurant ID: " + restaurantId);
+        } else {
+            System.out.println("Failed to insert menu item: " + name);
         }
     }
 }
