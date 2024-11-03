@@ -1,4 +1,4 @@
-# food-del-sys-grp-12-a2-api-bp-assignment
+# API BASED PRODUCTS - ASSIGNMENT-2
 # Food Delivery System API
 
 ## Overview
