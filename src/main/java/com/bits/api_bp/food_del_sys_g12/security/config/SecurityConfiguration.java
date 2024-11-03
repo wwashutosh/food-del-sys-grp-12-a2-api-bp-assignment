@@ -13,7 +13,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 
-import static com.bits.api_bp.food_del_sys_g12.security.entity.Permission.*;
 import static com.bits.api_bp.food_del_sys_g12.security.entity.Role.*;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
@@ -37,10 +36,10 @@ public class SecurityConfiguration {
             "/webjars/**",
             "/swagger-ui.html",
             "/h2-console/**"};
+
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
     private final LogoutHandler logoutHandler;
-
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -50,9 +49,9 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(req ->
                         req.requestMatchers(WHITE_LIST_URL)
                                 .permitAll()
-                                .requestMatchers("/food_del_sys_g12/**").hasAnyRole(ADMIN.name(), USER.name())
-                                .requestMatchers(GET, "/food_del_sys_g12/**").hasAnyAuthority(ADMIN_READ.name())
-                                .requestMatchers(POST, "/food_del_sys_g12/**").hasAnyAuthority(ADMIN_CREATE.name())
+                                .requestMatchers("/food_del_sys_g12/**").hasAnyRole(ADMIN.name(), CUSTOMER.name(), RESTAURANT_OWNER.name(), DELIVERY_PERSONNEL.name())
+                                .requestMatchers(GET, "/food_del_sys_g12/**").hasAnyRole(ADMIN.name(), CUSTOMER.name(), RESTAURANT_OWNER.name(), DELIVERY_PERSONNEL.name())
+                                .requestMatchers(POST, "/food_del_sys_g12/**").hasAnyRole(ADMIN.name(), RESTAURANT_OWNER.name(), DELIVERY_PERSONNEL.name())
                                 .anyRequest()
                                 .authenticated()
                 )
@@ -63,11 +62,8 @@ public class SecurityConfiguration {
                         logout.logoutUrl("/api/v1/auth/logout")
                                 .addLogoutHandler(logoutHandler)
                                 .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
-                )
-        ;
+                );
 
         return http.build();
     }
-
-
 }
