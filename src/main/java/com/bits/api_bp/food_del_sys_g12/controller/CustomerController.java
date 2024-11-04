@@ -1,29 +1,89 @@
 package com.bits.api_bp.food_del_sys_g12.controller;
 
+import com.bits.api_bp.food_del_sys_g12.entities.CartItemEntity;
+import com.bits.api_bp.food_del_sys_g12.entities.MenuEntity;
+import com.bits.api_bp.food_del_sys_g12.entities.OrderEntity;
+import com.bits.api_bp.food_del_sys_g12.entities.RestaurantEntity;
+import com.bits.api_bp.food_del_sys_g12.model.FilteredDataForSuggestion;
+import com.bits.api_bp.food_del_sys_g12.repository.RestaurantRepository;
+import com.bits.api_bp.food_del_sys_g12.services.CustomerService;
+import com.bits.api_bp.food_del_sys_g12.services.OrderService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
+
 
 @RestController
 @SuppressWarnings("unused")
 @CrossOrigin(origins = "http://localhost:3000")
-@RequestMapping("/food_del_sys_g12")
+@RequestMapping("/food_del_sys_g12/api/customer")
 public class CustomerController {
 
-    @GetMapping(value = "/getAppVersion", produces = {"application/json"})
-    public ResponseEntity<String> getAppVersion() {
+    @Autowired
+    private RestaurantRepository restaurantRepository;
+    @Autowired
+    private CustomerService customerService;
+    @Autowired
+    private OrderService orderService;
 
-        String appVersion = "1.0.0";
 
-        try {
-            System.out.println(appVersion);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return ResponseEntity.ok(appVersion);
+    // Endpoint to view list of all available restaurants
+    @GetMapping("/restaurants")
+    public ResponseEntity<List<RestaurantEntity>> getAllRestaurants() {
+        List<RestaurantEntity> restaurants = restaurantRepository.findAll();
+        return ResponseEntity.ok(restaurants);
     }
 
+    // Endpoint to view menu of a specific restaurant
+    @GetMapping("/restaurants/{id}/menu")
+    public ResponseEntity<List<MenuEntity>> getRestaurantMenu(@PathVariable("id") String restaurantId) {
+        List<MenuEntity> menu = customerService.getRestaurantMenu(restaurantId);
+        return ResponseEntity.ok(menu);
+    }
 
+    // Endpoint to search for food items/restaurants based on a keyword
+    @GetMapping("/filter")
+    public ResponseEntity<List<FilteredDataForSuggestion>> filterRestaurantsOrItems(@RequestParam("keyword") String keyword) {
+        List<FilteredDataForSuggestion> filteredResults = customerService.filterRestaurantsOrItems(keyword);
+        return ResponseEntity.ok(filteredResults);
+    }
+
+    // Endpoint to view cart contents
+    // View cart contents
+    @GetMapping("/cart")
+    public ResponseEntity<List<CartItemEntity>> getCartContents(@RequestParam("userId") String userId) {
+        List<CartItemEntity> cartContents = customerService.viewCart(userId);
+        return ResponseEntity.ok(cartContents);
+    }
+
+    // Add items to cart
+    @PostMapping("/cart")
+    public ResponseEntity<String> addItemToCart(@RequestBody CartItemEntity itemDetails) {
+        String responseMessage = customerService.addToCart(itemDetails);
+        return ResponseEntity.ok(responseMessage);
+    }
+
+    // Endpoint to place an order
+    @PostMapping("/order")
+    public ResponseEntity<String> placeOrder(@RequestBody Map<String, Object> orderDetails) {
+        // Logic to place an order based on the items in the cart or orderDetails
+        return ResponseEntity.ok("Order placed successfully");
+    }
+
+    // Endpoint to track an order by order ID
+    @GetMapping("/order/{id}/track")
+    public ResponseEntity<OrderEntity> trackOrder(@PathVariable("id") String orderId) {
+        OrderEntity order = orderService.getOrderById(orderId);
+        return ResponseEntity.ok(order); // Returns the order details including the status
+    }
+
+    // Endpoint to view list of past orders
+    @GetMapping("/orders")
+    public ResponseEntity<List<OrderEntity>> getPastOrders(@RequestParam("userId") String userId) {
+        List<OrderEntity> pastOrders = orderService.getPastOrders(userId);
+        return ResponseEntity.ok(pastOrders); // Returns a list of past orders for the user
+    }
 }
