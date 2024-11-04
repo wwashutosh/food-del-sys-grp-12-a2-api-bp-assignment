@@ -16,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "USERDETAILS")
+@Table(name = "USERS")
 public class Userdetail implements UserDetails {
     @Id
     @Column(name = "USERID", nullable = false)
@@ -33,6 +33,13 @@ public class Userdetail implements UserDetails {
 
     @Column(name = "PASSWORD")
     private String password;
+
+    @Column(name = "ADDRESS")
+    private String address;
+    @Column(name = "RESTAURANT_HOURS")
+    private String restaurantHours;
+    @Column(name = "DELIVERY_VEHICLE")
+    private String deliveryVehicle;
 
     @Enumerated(EnumType.STRING)
     private Role role;

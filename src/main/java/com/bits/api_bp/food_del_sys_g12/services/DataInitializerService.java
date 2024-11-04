@@ -28,17 +28,17 @@ public class DataInitializerService {
         jdbcTemplate.execute("DROP TABLE IF EXISTS orders;");
         jdbcTemplate.execute("DROP TABLE IF EXISTS menu;");
         jdbcTemplate.execute("DROP TABLE IF EXISTS restaurants;");
-        jdbcTemplate.execute("DROP TABLE IF EXISTS users;");
+//        jdbcTemplate.execute("DROP TABLE IF EXISTS users;");
     }
 
     private void createTables() {
-        jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS users (" +
-                "id CHAR(6) PRIMARY KEY," +
-                "name VARCHAR(255)," +
-                "email VARCHAR(255) UNIQUE," +
-                "password VARCHAR(255)," +
-                "role VARCHAR(50)" +
-                ");");
+//        jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS users (" +
+//                "id CHAR(6) PRIMARY KEY," +
+//                "name VARCHAR(255)," +
+//                "email VARCHAR(255) UNIQUE," +
+//                "password VARCHAR(255)," +
+//                "role VARCHAR(50)" +
+//                ");");
 
         jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS restaurants (" +
                 "id CHAR(6) PRIMARY KEY," +
@@ -75,11 +75,11 @@ public class DataInitializerService {
 
     private void insertDummyData() {
         // Insert users
-        insertUser("John Doe", "john@example.com", "hashed_password", "CUSTOMER");
-        insertUser("Jane Smith", "jane@example.com", "hashed_password", "RESTAURANT");
-        insertUser("Alice Johnson", "alice@example.com", "hashed_password", "DELIVERY");
-        insertUser("Bob Brown", "bob@example.com", "hashed_password", "CUSTOMER");
-        insertUser("Charlie Davis", "charlie@example.com", "hashed_password", "ADMIN");
+//        insertUser("John Doe", "john@example.com", "hashed_password", "CUSTOMER");
+//        insertUser("Jane Smith", "jane@example.com", "hashed_password", "RESTAURANT");
+//        insertUser("Alice Johnson", "alice@example.com", "hashed_password", "DELIVERY");
+//        insertUser("Bob Brown", "bob@example.com", "hashed_password", "CUSTOMER");
+//        insertUser("Charlie Davis", "charlie@example.com", "hashed_password", "ADMIN");
 
         // Insert restaurants
         insertRestaurant("The Great Indian Bistro", "123 Curry Lane, New Delhi", "Indian", 4.5);
@@ -108,15 +108,15 @@ public class DataInitializerService {
         insertCartItem("USER03", "ITEM03", 3);
     }
 
-    private void insertUser(String name, String email, String password, String role) {
-        int rows = jdbcTemplate.update("INSERT INTO users (id, name, email, password, role) VALUES (?, ?, ?, ?, ?)",
-                uuidService.generateShortUUID(), name, email, password, role);
-        if (rows > 0) {
-            System.out.println("Inserted user: " + name);
-        } else {
-            System.out.println("Failed to insert user: " + name);
-        }
-    }
+//    private void insertUser(String name, String email, String password, String role) {
+//        int rows = jdbcTemplate.update("INSERT INTO users (id, name, email, password, role) VALUES (?, ?, ?, ?, ?)",
+//                uuidService.generateShortUUID(), name, email, password, role);
+//        if (rows > 0) {
+//            System.out.println("Inserted user: " + name);
+//        } else {
+//            System.out.println("Failed to insert user: " + name);
+//        }
+//    }
 
     private void insertRestaurant(String name, String address, String cuisine, double rating) {
         int rows = jdbcTemplate.update("INSERT INTO restaurants (id, name, address, cuisine, rating) VALUES (?, ?, ?, ?, ?)",
