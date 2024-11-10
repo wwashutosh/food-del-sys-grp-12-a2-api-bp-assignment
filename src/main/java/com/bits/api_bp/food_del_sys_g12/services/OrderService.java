@@ -17,6 +17,10 @@ public class OrderService {
     public OrderEntity getOrderById(String orderId) {
         return orderRepository.findById(orderId).orElseThrow(() -> new RuntimeException("Order not found"));
     }
+    // Place an order
+    public OrderEntity placeOrder(OrderEntity order) {
+        return orderRepository.save(order);
+    }
 
     // Retrieve past orders for a user
     public List<OrderEntity> getPastOrders(String userId) {

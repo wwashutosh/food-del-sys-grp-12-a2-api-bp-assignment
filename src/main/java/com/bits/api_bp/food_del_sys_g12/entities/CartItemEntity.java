@@ -12,8 +12,8 @@ public class CartItemEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; // Unique identifier for each cart item
 
-    @Column(name = "user_id", nullable = false)
-    private String userId; // ID of the user who owns the cart
+    @Column(name = "USERID", nullable = false)
+    private String userId;
 
     @Column(name = "menu_item_id", nullable = false)
     private String menuItemId; // ID of the menu item
