@@ -8,5 +8,17 @@ import java.util.List;
 
 @Repository
 public interface OrderRepository extends JpaRepository<OrderEntity, String> {
-    List<OrderEntity> findByUserId(String userId); // Retrieve orders by user ID
+
+    // Find orders for a specific restaurant
+    List<OrderEntity> findByRestaurantId(String restaurantId);
+
+    // Find past orders for a specific customer/user
+    List<OrderEntity> findByUserId(String userId);
+
+    // Find orders assigned to a delivery personnel that are not delivered yet
+    List<OrderEntity> findByDeliveryPersonnelIdAndStatusNot(String deliveryPersonnelId, String status);
+
+    // Find completed (delivered) orders for a delivery personnel
+    List<OrderEntity> findByDeliveryPersonnelIdAndStatus(String deliveryPersonnelId, String status);
+
 }
