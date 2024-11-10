@@ -9,7 +9,7 @@ import lombok.Data;
 public class MenuEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private String id; // Unique identifier for each menu item
 
     @Column(name = "restaurant_id", nullable = false)

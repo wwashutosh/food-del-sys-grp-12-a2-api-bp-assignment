@@ -16,7 +16,7 @@ public class OrderEntity {
     @Column(name = "id", nullable = false)
     private String id; // Unique ID for the order
     @Column(name = "USERID", nullable = false)
-    private String userid;
+    private String userId;
     @Column(name = "restaurant_id", nullable = false)
     private String restaurantId;// ID of the restaurant
     @Column(name = "order_date", nullable = false)

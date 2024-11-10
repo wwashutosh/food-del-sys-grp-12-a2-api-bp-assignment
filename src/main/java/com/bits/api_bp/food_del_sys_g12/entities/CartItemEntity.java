@@ -9,8 +9,8 @@ import lombok.Data;
 public class CartItemEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // Unique identifier for each cart item
+    @Column(name = "id", nullable = false)
+    private String id; // Unique identifier for each cart item
 
     @Column(name = "USERID", nullable = false)
     private String userId;
