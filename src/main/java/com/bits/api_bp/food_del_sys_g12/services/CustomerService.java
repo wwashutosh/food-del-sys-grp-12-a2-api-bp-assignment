@@ -2,7 +2,6 @@ package com.bits.api_bp.food_del_sys_g12.services;
 
 import com.bits.api_bp.food_del_sys_g12.entities.CartItemEntity;
 import com.bits.api_bp.food_del_sys_g12.entities.MenuEntity;
-import com.bits.api_bp.food_del_sys_g12.entities.OrderEntity;
 import com.bits.api_bp.food_del_sys_g12.entities.RestaurantEntity;
 import com.bits.api_bp.food_del_sys_g12.model.FilteredDataForSuggestion;
 import com.bits.api_bp.food_del_sys_g12.repository.CartRepository;
@@ -81,13 +80,6 @@ public class CustomerService {
         }
     }
 
-    // Place an order
-    public OrderEntity placeOrder(OrderEntity order) {
-        return orderRepository.save(order);
-    }
 
-    // Get past orders for a user
-    public List<OrderEntity> getPastOrders(String userId) {
-        return orderRepository.findByUserId(userId);
-    }
+
 }

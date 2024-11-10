@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 
 @RestController
@@ -68,9 +67,9 @@ public class CustomerController {
 
     // Endpoint to place an order
     @PostMapping("/order")
-    public ResponseEntity<String> placeOrder(@RequestBody Map<String, Object> orderDetails) {
-        // Logic to place an order based on the items in the cart or orderDetails
-        return ResponseEntity.ok("Order placed successfully");
+    public ResponseEntity<OrderEntity> placeOrder(@RequestBody OrderEntity order) {
+        OrderEntity placedOrder = orderService.placeOrder(order);
+        return ResponseEntity.ok(placedOrder); // Returns the placed order with the generated ID and other details
     }
 
     // Endpoint to track an order by order ID
