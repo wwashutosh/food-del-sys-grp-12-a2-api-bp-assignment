@@ -15,7 +15,7 @@ import java.util.Map;
 
 @SuppressWarnings("unused")
 @RestController
-@RequestMapping("/food_del_sys_g12/admin")
+@RequestMapping("/food_del_sys_g12/api/admin")
 public class AdminController {
 
     @Autowired
