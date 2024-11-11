@@ -3,158 +3,138 @@ package com.bits.api_bp.food_del_sys_g12.services;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 @Service
-@Component
 public class DataInitializerService {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    @Autowired
-    private UUIDService uuidService;
-
     @PostConstruct
-    public void populateDummyData() {
+    public void initializeDatabase() {
         dropTables();
         createTables();
-        insertDummyData();
+        insertRestaurants();
+        insertUsers();
+        insertDeliveryPersonnel();
+        insertMenuItems();
+        insertCartItems();
+        insertOrders();
     }
 
     private void dropTables() {
-        jdbcTemplate.execute("DROP TABLE IF EXISTS cart_items;");
-        jdbcTemplate.execute("DROP TABLE IF EXISTS orders;");
-        jdbcTemplate.execute("DROP TABLE IF EXISTS menu;");
-        jdbcTemplate.execute("DROP TABLE IF EXISTS restaurants;");
-//        jdbcTemplate.execute("DROP TABLE IF EXISTS users;");
+        jdbcTemplate.execute("DROP TABLE IF EXISTS CART_ITEMS CASCADE");
+        jdbcTemplate.execute("DROP TABLE IF EXISTS DELIVERY_PERSONNEL CASCADE");
+        jdbcTemplate.execute("DROP TABLE IF EXISTS MENU CASCADE");
+        jdbcTemplate.execute("DROP TABLE IF EXISTS ORDERS CASCADE");
+        jdbcTemplate.execute("DROP TABLE IF EXISTS RESTAURANTS CASCADE");
+
     }
 
     private void createTables() {
-//        jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS users (" +
-//                "id CHAR(6) PRIMARY KEY," +
-//                "name VARCHAR(255)," +
-//                "email VARCHAR(255) UNIQUE," +
-//                "password VARCHAR(255)," +
-//                "role VARCHAR(50)" +
-//                ");");
+        jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS RESTAURANTS (" +
+                "ID CHARACTER VARYING(255) PRIMARY KEY, " +
+                "ADDRESS CHARACTER VARYING(255), " +
+                "CUISINE CHARACTER VARYING(255), " +
+                "NAME CHARACTER VARYING(255), " +
+                "RATING FLOAT(53)" +
+                ")");
 
-        jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS restaurants (" +
-                "id CHAR(6) PRIMARY KEY," +
-                "name VARCHAR(255)," +
-                "address VARCHAR(255)," +
-                "cuisine VARCHAR(100)," +
-                "rating DECIMAL(2, 1)" +
-                ");");
+        jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS CART_ITEMS (" +
+                "ID CHARACTER VARYING(255) PRIMARY KEY, " +
+                "MENU_ITEM_ID CHARACTER VARYING(255), " +
+                "QUANTITY INTEGER, " +
+                "USERID CHARACTER VARYING(255)" +
+                ")");
 
-        jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS menu (" +
-                "id CHAR(6) PRIMARY KEY," +
-                "restaurant_id CHAR(6)," +
-                "item_name VARCHAR(255)," +
-                "description VARCHAR(255)," +
-                "price DECIMAL(10, 2)," +
-                "availability BOOLEAN" +
-                ");");
+        // Create other tables similarly...
 
-        jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS orders (" +
-                "id CHAR(6) PRIMARY KEY," +
-                "user_id CHAR(6)," +
-                "restaurant_id CHAR(6)," +
-                "order_date TIMESTAMP," +
-                "status VARCHAR(50)" +
-                ");");
+        jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS DELIVERY_PERSONNEL (" +
+                "ID CHARACTER VARYING(255) PRIMARY KEY, " +
+                "AVAILABILITY BOOLEAN" +
+                ")");
 
-        jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS cart_items (" +
-                "id CHAR(6) PRIMARY KEY," +
-                "user_id CHAR(6)," +
-                "menu_item_id CHAR(6)," +
-                "quantity INT" +
-                ");");
+        jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS MENU (" +
+                "ID CHARACTER VARYING(255) PRIMARY KEY, " +
+                "AVAILABILITY BOOLEAN, " +
+                "DESCRIPTION CHARACTER VARYING(255), " +
+                "NAME CHARACTER VARYING(255), " +
+                "PRICE FLOAT(53), " +
+                "RESTAURANT_ID CHARACTER VARYING(255)" +
+                ")");
+
+        jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS ORDERS (" +
+                "ID CHARACTER VARYING(255) PRIMARY KEY, " +
+                "DELIVERY_DATE TIMESTAMP, " +
+                "DELIVERY_PERSONNEL_ID CHARACTER VARYING(255), " +
+                "ORDER_DATE TIMESTAMP, " +
+                "RESTAURANT_ID CHARACTER VARYING(255), " +
+                "STATUS CHARACTER VARYING(255), " +
+                "USERID CHARACTER VARYING(255)" +
+                ")");
+
+        jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS TOKEN (" +
+                "USERID CHARACTER VARYING(255) PRIMARY KEY" +
+                ")");
+
+        // USERS table should already exist and thus is not recreated.
     }
 
-    private void insertDummyData() {
-        // Insert users
-//        insertUser("John Doe", "john@example.com", "hashed_password", "CUSTOMER");
-//        insertUser("Jane Smith", "jane@example.com", "hashed_password", "RESTAURANT");
-//        insertUser("Alice Johnson", "alice@example.com", "hashed_password", "DELIVERY");
-//        insertUser("Bob Brown", "bob@example.com", "hashed_password", "CUSTOMER");
-//        insertUser("Charlie Davis", "charlie@example.com", "hashed_password", "ADMIN");
-
-        // Insert restaurants
-        insertRestaurant("The Great Indian Bistro", "123 Curry Lane, New Delhi", "Indian", 4.5);
-        insertRestaurant("Pizza Paradise", "456 Cheese St, Mumbai", "Italian", 4.2);
-        insertRestaurant("Sushi World", "789 Fish Ave, Tokyo", "Japanese", 4.7);
-        insertRestaurant("Taco Fiesta", "321 Spice Rd, Mexico City", "Mexican", 4.1);
-        insertRestaurant("Burger Haven", "654 Meat St, Chicago", "American", 4.6);
-
-        // Insert menu items
-        insertMenuItem("ITEM01", "Butter Chicken", "Creamy chicken curry", 12.99, true);
-        insertMenuItem("ITEM02", "Margherita Pizza", "Classic pizza with mozzarella and basil", 9.99, true);
-        insertMenuItem("ITEM03", "California Roll", "Sushi with crab, avocado, and cucumber", 8.99, true);
-        insertMenuItem("ITEM04", "Tacos al Pastor", "Tacos with marinated pork", 7.49, true);
-        insertMenuItem("ITEM05", "Cheeseburger", "Juicy burger with cheese", 10.49, true);
-
-        // Insert orders
-        insertOrder("USER01", "RESTA1", "DELIVERED");
-        insertOrder("USER02", "RESTA2", "PENDING");
-        insertOrder("USER03", "RESTA3", "CANCELLED");
-        insertOrder("USER04", "RESTA4", "IN_PROGRESS");
-        insertOrder("USER05", "RESTA5", "DELIVERED");
-
-        // Insert cart items
-        insertCartItem("USER01", "ITEM01", 2);
-        insertCartItem("USER02", "ITEM02", 1);
-        insertCartItem("USER03", "ITEM03", 3);
+    private void insertRestaurants() {
+        jdbcTemplate.update("INSERT INTO RESTAURANTS (ID, ADDRESS, CUISINE, NAME, RATING) VALUES ('r1', '123 Main St', 'Italian', 'Pasta Palace', 4.5)");
+        jdbcTemplate.update("INSERT INTO RESTAURANTS (ID, ADDRESS, CUISINE, NAME, RATING) VALUES ('r2', '456 Elm St', 'American', 'Burger Barn', 4.2)");
+        jdbcTemplate.update("INSERT INTO RESTAURANTS (ID, ADDRESS, CUISINE, NAME, RATING) VALUES ('r3', '789 Oak St', 'Mexican', 'Taco Town', 4.0)");
+        jdbcTemplate.update("INSERT INTO RESTAURANTS (ID, ADDRESS, CUISINE, NAME, RATING) VALUES ('r4', '101 Pine St', 'Chinese', 'Wok Wonders', 4.3)");
+        jdbcTemplate.update("INSERT INTO RESTAURANTS (ID, ADDRESS, CUISINE, NAME, RATING) VALUES ('r5', '202 Maple St', 'Indian', 'Curry Corner', 4.4)");
     }
 
-//    private void insertUser(String name, String email, String password, String role) {
-//        int rows = jdbcTemplate.update("INSERT INTO users (id, name, email, password, role) VALUES (?, ?, ?, ?, ?)",
-//                uuidService.generateShortUUID(), name, email, password, role);
-//        if (rows > 0) {
-//            System.out.println("Inserted user: " + name);
-//        } else {
-//            System.out.println("Failed to insert user: " + name);
-//        }
-//    }
+    private void insertUsers() {
+        // Customer Users
+        jdbcTemplate.update("INSERT INTO USERS (USERID, ACTIVE, ADDRESS, EMAILADDRESS, NAME, PASSWORD, PHONE, ROLE) VALUES ('u1', true, '111 Customer St', 'customer1@example.com', 'Alice', 'pass123', '1234567890', 'CUSTOMER')");
+        jdbcTemplate.update("INSERT INTO USERS (USERID, ACTIVE, ADDRESS, EMAILADDRESS, NAME, PASSWORD, PHONE, ROLE) VALUES ('u2', true, '222 Customer St', 'customer2@example.com', 'Bob', 'pass456', '0987654321', 'CUSTOMER')");
 
-    private void insertRestaurant(String name, String address, String cuisine, double rating) {
-        int rows = jdbcTemplate.update("INSERT INTO restaurants (id, name, address, cuisine, rating) VALUES (?, ?, ?, ?, ?)",
-                uuidService.generateShortUUID(), name, address, cuisine, rating);
-        if (rows > 0) {
-            System.out.println("Inserted restaurant: " + name);
-        } else {
-            System.out.println("Failed to insert restaurant: " + name);
-        }
+        // Restaurant Owner Users
+        jdbcTemplate.update("INSERT INTO USERS (USERID, ACTIVE, ADDRESS, EMAILADDRESS, NAME, PASSWORD, PHONE, RESTAURANT_HOURS, ROLE) VALUES ('u3', true, '333 Restaurant St', 'owner1@example.com', 'Charlie', 'pass789', '1122334455', '9 AM - 9 PM', 'RESTAURANT_OWNER')");
+        jdbcTemplate.update("INSERT INTO USERS (USERID, ACTIVE, ADDRESS, EMAILADDRESS, NAME, PASSWORD, PHONE, RESTAURANT_HOURS, ROLE) VALUES ('u4', true, '444 Restaurant St', 'owner2@example.com', 'David', 'pass101', '6677889900', '10 AM - 8 PM', 'RESTAURANT_OWNER')");
+
+        // Delivery Personnel Users
+        jdbcTemplate.update("INSERT INTO USERS (USERID, ACTIVE, ADDRESS, DELIVERY_VEHICLE, EMAILADDRESS, NAME, PASSWORD, PHONE, ROLE) VALUES ('u5', true, '555 Delivery St', 'Bike', 'delivery1@example.com', 'Eve', 'pass202', '3344556677', 'DELIVERY_PERSONNEL')");
+        jdbcTemplate.update("INSERT INTO USERS (USERID, ACTIVE, ADDRESS, DELIVERY_VEHICLE, EMAILADDRESS, NAME, PASSWORD, PHONE, ROLE) VALUES ('u6', true, '666 Delivery St', 'Car', 'delivery2@example.com', 'Frank', 'pass303', '5566778899', 'DELIVERY_PERSONNEL')");
+
+        // Admin User
+        jdbcTemplate.update("INSERT INTO USERS (USERID, ACTIVE, ADDRESS, EMAILADDRESS, NAME, PASSWORD, PHONE, ROLE) VALUES ('u7', true, '777 Admin St', 'admin@example.com', 'Grace', 'pass404', '7788990011', 'ADMIN')");
     }
 
-    private void insertMenuItem(String itemId, String itemName, String description, double price, boolean availability) {
-        int rows = jdbcTemplate.update("INSERT INTO menu (id, restaurant_id, item_name, description, price, availability) VALUES (?, ?, ?, ?, ?, ?)",
-                itemId, "RESTA1", itemName, description, price, availability);
-        if (rows > 0) {
-            System.out.println("Inserted menu item: " + itemName);
-        } else {
-            System.out.println("Failed to insert menu item: " + itemName);
-        }
+    private void insertDeliveryPersonnel() {
+        jdbcTemplate.update("INSERT INTO DELIVERY_PERSONNEL (ID, AVAILABILITY) VALUES ('dp1', true)");
+        jdbcTemplate.update("INSERT INTO DELIVERY_PERSONNEL (ID, AVAILABILITY) VALUES ('dp2', false)");
+        jdbcTemplate.update("INSERT INTO DELIVERY_PERSONNEL (ID, AVAILABILITY) VALUES ('dp3', true)");
+        jdbcTemplate.update("INSERT INTO DELIVERY_PERSONNEL (ID, AVAILABILITY) VALUES ('dp4', true)");
+        jdbcTemplate.update("INSERT INTO DELIVERY_PERSONNEL (ID, AVAILABILITY) VALUES ('dp5', false)");
     }
 
-    private void insertOrder(String userId, String restaurantId, String status) {
-        int rows = jdbcTemplate.update("INSERT INTO orders (id, user_id, restaurant_id, order_date, status) VALUES (?, ?, ?, NOW(), ?)",
-                uuidService.generateShortUUID(), userId, restaurantId, status);
-        if (rows > 0) {
-            System.out.println("Inserted order for user ID: " + userId);
-        } else {
-            System.out.println("Failed to insert order for user ID: " + userId);
-        }
+    private void insertMenuItems() {
+        jdbcTemplate.update("INSERT INTO MENU (ID, AVAILABILITY, DESCRIPTION, NAME, PRICE, RESTAURANT_ID) VALUES ('m1', true, 'Spicy Chicken', 'Chicken Dish', 12.99, 'r1')");
+        jdbcTemplate.update("INSERT INTO MENU (ID, AVAILABILITY, DESCRIPTION, NAME, PRICE, RESTAURANT_ID) VALUES ('m2', true, 'Veggie Delight', 'Vegetable Salad', 9.99, 'r1')");
+        jdbcTemplate.update("INSERT INTO MENU (ID, AVAILABILITY, DESCRIPTION, NAME, PRICE, RESTAURANT_ID) VALUES ('m3', false, 'Beef Burger', 'Burger', 11.49, 'r2')");
+        jdbcTemplate.update("INSERT INTO MENU (ID, AVAILABILITY, DESCRIPTION, NAME, PRICE, RESTAURANT_ID) VALUES ('m4', true, 'Pepperoni Pizza', 'Pizza', 15.99, 'r2')");
+        jdbcTemplate.update("INSERT INTO MENU (ID, AVAILABILITY, DESCRIPTION, NAME, PRICE, RESTAURANT_ID) VALUES ('m5', true, 'Pasta Primavera', 'Pasta', 13.50, 'r3')");
     }
 
-    private void insertCartItem(String userId, String menuItemId, int quantity) {
-        int rows = jdbcTemplate.update("INSERT INTO cart_items (id, user_id, menu_item_id, quantity) VALUES (?, ?, ?, ?)",
-                uuidService.generateShortUUID(), userId, menuItemId, quantity);
-        if (rows > 0) {
-            System.out.println("Inserted cart item for user ID: " + userId);
-        } else {
-            System.out.println("Failed to insert cart item for user ID: " + userId);
-        }
+    private void insertCartItems() {
+        jdbcTemplate.update("INSERT INTO CART_ITEMS (ID, MENU_ITEM_ID, QUANTITY, USERID) VALUES ('c1', 'm1', 2, 'u1')");
+        jdbcTemplate.update("INSERT INTO CART_ITEMS (ID, MENU_ITEM_ID, QUANTITY, USERID) VALUES ('c2', 'm2', 1, 'u1')");
+        jdbcTemplate.update("INSERT INTO CART_ITEMS (ID, MENU_ITEM_ID, QUANTITY, USERID) VALUES ('c3', 'm3', 3, 'u2')");
+        jdbcTemplate.update("INSERT INTO CART_ITEMS (ID, MENU_ITEM_ID, QUANTITY, USERID) VALUES ('c4', 'm4', 1, 'u3')");
+        jdbcTemplate.update("INSERT INTO CART_ITEMS (ID, MENU_ITEM_ID, QUANTITY, USERID) VALUES ('c5', 'm5', 4, 'u4')");
+    }
+
+    private void insertOrders() {
+        jdbcTemplate.update("INSERT INTO ORDERS (ID, DELIVERY_DATE, DELIVERY_PERSONNEL_ID, ORDER_DATE, RESTAURANT_ID, STATUS, USERID) VALUES ('o1', CURRENT_TIMESTAMP, 'dp1', CURRENT_TIMESTAMP, 'r1', 'DELIVERED', 'u1')");
+        jdbcTemplate.update("INSERT INTO ORDERS (ID, DELIVERY_DATE, DELIVERY_PERSONNEL_ID, ORDER_DATE, RESTAURANT_ID, STATUS, USERID) VALUES ('o2', CURRENT_TIMESTAMP, 'dp2', CURRENT_TIMESTAMP, 'r2', 'PENDING', 'u1')");
+        jdbcTemplate.update("INSERT INTO ORDERS (ID, DELIVERY_DATE, DELIVERY_PERSONNEL_ID, ORDER_DATE, RESTAURANT_ID, STATUS, USERID) VALUES ('o3', CURRENT_TIMESTAMP, 'dp3', CURRENT_TIMESTAMP, 'r2', 'DELIVERED', 'u2')");
+        jdbcTemplate.update("INSERT INTO ORDERS (ID, DELIVERY_DATE, DELIVERY_PERSONNEL_ID, ORDER_DATE, RESTAURANT_ID, STATUS, USERID) VALUES ('o4', CURRENT_TIMESTAMP, 'dp4', CURRENT_TIMESTAMP, 'r3', 'CANCELLED', 'u3')");
+        jdbcTemplate.update("INSERT INTO ORDERS (ID, DELIVERY_DATE, DELIVERY_PERSONNEL_ID, ORDER_DATE, RESTAURANT_ID, STATUS, USERID) VALUES ('o5', CURRENT_TIMESTAMP, 'dp5', CURRENT_TIMESTAMP, 'r3', 'PENDING', 'u4')");
     }
 }
