@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class OrderService {
@@ -25,5 +26,22 @@ public class OrderService {
     // Retrieve past orders for a user
     public List<OrderEntity> getPastOrders(String userId) {
         return orderRepository.findByUserId(userId);
+    }
+    public List<OrderEntity> getAllOrders() {
+        return orderRepository.findAll();
+    }
+    public void updateOrderStatus(String orderId, String status) {
+        Optional<OrderEntity> order = orderRepository.findById(orderId);
+        order.ifPresent(o -> {
+            o.setStatus(status);
+            orderRepository.save(o);
+        });
+    }
+    public void cancelOrder(String orderId) {
+        Optional<OrderEntity> order = orderRepository.findById(orderId);
+        order.ifPresent(o -> {
+            o.setStatus("Cancelled");
+            orderRepository.save(o);
+        });
     }
 }

@@ -2,6 +2,7 @@ package com.bits.api_bp.food_del_sys_g12.repository;
 
 import com.bits.api_bp.food_del_sys_g12.entities.OrderEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -21,4 +22,14 @@ public interface OrderRepository extends JpaRepository<OrderEntity, String> {
     // Find completed (delivered) orders for a delivery personnel
     List<OrderEntity> findByDeliveryPersonnelIdAndStatus(String deliveryPersonnelId, String status);
 
+    long countByStatus(String status);
+
+    @Query("SELECT o.restaurantId, COUNT(o) AS orderCount FROM OrderEntity o GROUP BY o.restaurantId ORDER BY orderCount DESC")
+    List<Object[]> findPopularRestaurants();
+
+    @Query("SELECT AVG(TIMESTAMPDIFF(SECOND, o.orderDate, o.deliveryDate)) / 60.0 FROM OrderEntity o WHERE o.status = 'Completed'")
+    double calculateAverageDeliveryTime();
+
+    @Query("SELECT DATE(o.orderDate), COUNT(o) FROM OrderEntity o GROUP BY DATE(o.orderDate)")
+    List<Object[]> findOrderTrends();
 }

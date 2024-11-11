@@ -10,4 +10,5 @@ import java.util.Optional;
 public interface UserDetailsRepository extends JpaRepository<Userdetail, String> {
     Optional<Userdetail> findByEmailaddress(String email);
 
+    long countByActive(boolean active);
 }

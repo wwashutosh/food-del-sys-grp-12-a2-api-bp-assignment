@@ -44,6 +44,9 @@ public class Userdetail implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @Column(nullable = false)
+    private boolean active = true;
+
     @OneToMany(mappedBy = "user")
     private List<Token> tokens;
 
