@@ -1,10 +1,8 @@
 package com.bits.api_bp.food_del_sys_g12.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.GenericGenerator;
 
 @Data
 @Entity
@@ -12,6 +10,8 @@ import lombok.Data;
 public class RestaurantEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "system-uuid")
+    @GenericGenerator(name = "system-uuid", strategy = "uuid2")
     @Column(name = "id", nullable = false)
     private String id;
     @Column(name = "name", nullable = false)
