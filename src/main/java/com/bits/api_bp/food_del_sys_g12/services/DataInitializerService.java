@@ -88,20 +88,20 @@ public class DataInitializerService {
     }
 
     private void insertUsers() {
-        // Customer Users
-        jdbcTemplate.update("INSERT INTO USERS (USERID, ACTIVE, ADDRESS, EMAILADDRESS, NAME, PASSWORD, PHONE, ROLE) VALUES ('u1', true, '111 Customer St', 'customer1@example.com', 'Alice', 'pass123', '1234567890', 'CUSTOMER')");
-        jdbcTemplate.update("INSERT INTO USERS (USERID, ACTIVE, ADDRESS, EMAILADDRESS, NAME, PASSWORD, PHONE, ROLE) VALUES ('u2', true, '222 Customer St', 'customer2@example.com', 'Bob', 'pass456', '0987654321', 'CUSTOMER')");
-
-        // Restaurant Owner Users
-        jdbcTemplate.update("INSERT INTO USERS (USERID, ACTIVE, ADDRESS, EMAILADDRESS, NAME, PASSWORD, PHONE, RESTAURANT_HOURS, ROLE) VALUES ('u3', true, '333 Restaurant St', 'owner1@example.com', 'Charlie', 'pass789', '1122334455', '9 AM - 9 PM', 'RESTAURANT_OWNER')");
-        jdbcTemplate.update("INSERT INTO USERS (USERID, ACTIVE, ADDRESS, EMAILADDRESS, NAME, PASSWORD, PHONE, RESTAURANT_HOURS, ROLE) VALUES ('u4', true, '444 Restaurant St', 'owner2@example.com', 'David', 'pass101', '6677889900', '10 AM - 8 PM', 'RESTAURANT_OWNER')");
-
-        // Delivery Personnel Users
-        jdbcTemplate.update("INSERT INTO USERS (USERID, ACTIVE, ADDRESS, DELIVERY_VEHICLE, EMAILADDRESS, NAME, PASSWORD, PHONE, ROLE) VALUES ('u5', true, '555 Delivery St', 'Bike', 'delivery1@example.com', 'Eve', 'pass202', '3344556677', 'DELIVERY_PERSONNEL')");
-        jdbcTemplate.update("INSERT INTO USERS (USERID, ACTIVE, ADDRESS, DELIVERY_VEHICLE, EMAILADDRESS, NAME, PASSWORD, PHONE, ROLE) VALUES ('u6', true, '666 Delivery St', 'Car', 'delivery2@example.com', 'Frank', 'pass303', '5566778899', 'DELIVERY_PERSONNEL')");
-
-        // Admin User
-        jdbcTemplate.update("INSERT INTO USERS (USERID, ACTIVE, ADDRESS, EMAILADDRESS, NAME, PASSWORD, PHONE, ROLE) VALUES ('u7', true, '777 Admin St', 'admin@example.com', 'Grace', 'pass404', '7788990011', 'ADMIN')");
+//        // Customer Users
+//        jdbcTemplate.update("INSERT INTO USERS (USERID, ACTIVE, ADDRESS, EMAILADDRESS, NAME, PASSWORD, PHONE, ROLE) VALUES ('u1', true, '111 Customer St', 'customer1@example.com', 'Alice', 'pass123', '1234567890', 'CUSTOMER')");
+//        jdbcTemplate.update("INSERT INTO USERS (USERID, ACTIVE, ADDRESS, EMAILADDRESS, NAME, PASSWORD, PHONE, ROLE) VALUES ('u2', true, '222 Customer St', 'customer2@example.com', 'Bob', 'pass456', '0987654321', 'CUSTOMER')");
+//
+//        // Restaurant Owner Users
+//        jdbcTemplate.update("INSERT INTO USERS (USERID, ACTIVE, ADDRESS, EMAILADDRESS, NAME, PASSWORD, PHONE, RESTAURANT_HOURS, ROLE) VALUES ('u3', true, '333 Restaurant St', 'owner1@example.com', 'Charlie', 'pass789', '1122334455', '9 AM - 9 PM', 'RESTAURANT_OWNER')");
+//        jdbcTemplate.update("INSERT INTO USERS (USERID, ACTIVE, ADDRESS, EMAILADDRESS, NAME, PASSWORD, PHONE, RESTAURANT_HOURS, ROLE) VALUES ('u4', true, '444 Restaurant St', 'owner2@example.com', 'David', 'pass101', '6677889900', '10 AM - 8 PM', 'RESTAURANT_OWNER')");
+//
+//        // Delivery Personnel Users
+//        jdbcTemplate.update("INSERT INTO USERS (USERID, ACTIVE, ADDRESS, DELIVERY_VEHICLE, EMAILADDRESS, NAME, PASSWORD, PHONE, ROLE) VALUES ('u5', true, '555 Delivery St', 'Bike', 'delivery1@example.com', 'Eve', 'pass202', '3344556677', 'DELIVERY_PERSONNEL')");
+//        jdbcTemplate.update("INSERT INTO USERS (USERID, ACTIVE, ADDRESS, DELIVERY_VEHICLE, EMAILADDRESS, NAME, PASSWORD, PHONE, ROLE) VALUES ('u6', true, '666 Delivery St', 'Car', 'delivery2@example.com', 'Frank', 'pass303', '5566778899', 'DELIVERY_PERSONNEL')");
+//
+//        // Admin User
+//        jdbcTemplate.update("INSERT INTO USERS (USERID, ACTIVE, ADDRESS, EMAILADDRESS, NAME, PASSWORD, PHONE, ROLE) VALUES ('u7', true, '777 Admin St', 'admin@example.com', 'Grace', 'pass404', '7788990011', 'ADMIN')");
     }
 
     private void insertDeliveryPersonnel() {
