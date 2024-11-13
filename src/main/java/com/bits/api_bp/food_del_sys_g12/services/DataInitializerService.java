@@ -29,6 +29,7 @@ public class DataInitializerService {
         jdbcTemplate.execute("DROP TABLE IF EXISTS MENU CASCADE");
         jdbcTemplate.execute("DROP TABLE IF EXISTS ORDERS CASCADE");
         jdbcTemplate.execute("DROP TABLE IF EXISTS RESTAURANTS CASCADE");
+//        jdbcTemplate.execute("DROP TABLE IF EXISTS USERS CASCADE");
 
     }
 
@@ -74,9 +75,6 @@ public class DataInitializerService {
                 "USERID CHARACTER VARYING(255)" +
                 ")");
 
-        jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS TOKEN (" +
-                "USERID CHARACTER VARYING(255) PRIMARY KEY" +
-                ")");
 
         // USERS table should already exist and thus is not recreated.
     }
