@@ -27,9 +27,11 @@ public interface OrderRepository extends JpaRepository<OrderEntity, String> {
     @Query("SELECT o.restaurantId, COUNT(o) AS orderCount FROM OrderEntity o GROUP BY o.restaurantId ORDER BY orderCount DESC")
     List<Object[]> findPopularRestaurants();
 
-    @Query("SELECT AVG(TIMESTAMPDIFF(SECOND, o.orderDate, o.deliveryDate)) / 60.0 FROM OrderEntity o WHERE o.status = 'Completed'")
+    @Query("SELECT AVG(TIMESTAMPDIFF(SECOND, o.orderDate, o.deliveryDate)) / 60.0 FROM OrderEntity o WHERE o.status = 'DELIVERED'")
     double calculateAverageDeliveryTime();
 
-    @Query("SELECT DATE(o.orderDate), COUNT(o) FROM OrderEntity o GROUP BY DATE(o.orderDate)")
+    @Query("SELECT FUNCTION('FORMATDATETIME', o.orderDate, 'yyyy-MM-dd') AS orderDate, COUNT(o) AS orderCount " +
+            "FROM OrderEntity o " +
+            "GROUP BY FUNCTION('FORMATDATETIME', o.orderDate, 'yyyy-MM-dd')")
     List<Object[]> findOrderTrends();
 }

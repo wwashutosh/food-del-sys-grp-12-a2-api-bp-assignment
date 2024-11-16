@@ -22,9 +22,7 @@ public class UserManagingService {
     public Userdetail getUserDetailsByEmail(String email) {
         return userDetailsRepo.findByEmailaddress(email).get();
     }
-    public void createUser(Userdetail user) {
-        userDetailsRepo.save(user);
-    }
+
     public void updateUser(String userId, Userdetail updatedUser) {
         Optional<Userdetail> existingUser = userDetailsRepo.findById(userId);
         if (existingUser.isPresent()) {
