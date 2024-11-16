@@ -26,6 +26,7 @@ public class HomeController {
                             <h1>Welcome to the Food Delivery System API Backend Service!</h1>
                             <p>This is for Group-12 - API Based Products Assignment-2.</p>
                             <p>Use the available endpoints to interact with the system.</p>
+                            <p>Visit the project repository on <a href="https://github.com/wwashutosh/food-del-sys-grp-12-a2-api-bp-assignment" target="_blank">GitHub</a>.</p>
                             <div class="footer">Powered by Group-12</div>
                         </div>
                     </body>
