@@ -27,17 +27,22 @@ public class AdminService {
 
     public Map<String, Object> getDeliveryActivityStatus() {
         Map<String, Object> activity = new HashMap<>();
-        long activeDeliveries = orderRepository.countByStatus("In Progress");
+        long activeDeliveries = orderRepository.countByStatus("PENDING");
         activity.put("activeDeliveries", activeDeliveries);
+        long delivered = orderRepository.countByStatus("DELIVERED");
+        activity.put("delivered", delivered);
         return activity;
     }
 
     public Map<String, Object> getOrderStatusOverview() {
         Map<String, Object> overview = new HashMap<>();
-        long pendingOrders = orderRepository.countByStatus("Pending");
-        long completedOrders = orderRepository.countByStatus("Completed");
+        long pendingOrders = orderRepository.countByStatus("PENDING");
+        long completedOrders = orderRepository.countByStatus("DELIVERED");
+        long cancelledOrders = orderRepository.countByStatus("CANCELLED");
+
         overview.put("pendingOrders", pendingOrders);
         overview.put("completedOrders", completedOrders);
+        overview.put("cancelledOrders",cancelledOrders);
         return overview;
     }
 }

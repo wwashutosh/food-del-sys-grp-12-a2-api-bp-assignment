@@ -31,12 +31,6 @@ public class AdminController {
     private ReportService reportService;
 
     // Manage Users - create, update, deactivate user accounts
-    @PostMapping("/users")
-    public ResponseEntity<String> createUser(@RequestBody Userdetail user) {
-        userService.createUser(user);
-        return ResponseEntity.ok("User created successfully");
-    }
-
     @PutMapping("/users/{userId}")
     public ResponseEntity<String> updateUser(@PathVariable String userId, @RequestBody Userdetail updatedUser) {
         userService.updateUser(userId, updatedUser);
