@@ -41,6 +41,7 @@ public class AuthenticationService {
                 .address(request.getAddress())
                 .deliveryVehicle(request.getDeliveryVehicle())
                 .restaurantHours(request.getRestaurantHours())
+                .active(true)
                 .build();
         var savedUser = repository.save(user);
         var jwtToken = jwtService.generateToken(user);
